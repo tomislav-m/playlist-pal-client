@@ -11,11 +11,11 @@ export const Logout = () => {
     window.location.reload();
   };
 
-  return token ? (
-    <Button color="inherit" onClick={logout}>
-      Logout
-    </Button>
-  ) : (
-    <></>
+  return (
+    token && (
+      <Button color="inherit" onClick={logout}>
+        Logout
+      </Button>
+    )
   );
 };

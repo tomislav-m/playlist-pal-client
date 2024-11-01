@@ -2,11 +2,12 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { CssBaseline } from "@mui/material";
-import App from "./App";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <CssBaseline />
-    <App />
+    <RouterProvider router={router}/>
   </StrictMode>
 );

@@ -33,18 +33,17 @@ const PlaylistGenerator: FC = () => {
       size: playlistSize,
     })
       .then(() => {
-        setIsCreating(false);
-
         setSnackbarColor("success");
         setSnackbarMessage("Success!");
       })
       .catch(() => {
-        setIsCreating(false);
-
         setSnackbarColor("error");
         setSnackbarMessage("Error!");
       })
-      .finally(() => setSnackbarOpen(true));
+      .finally(() => {
+        setIsCreating(false);
+        setSnackbarOpen(true);
+      });
   };
 
   const handleClose = () => {
