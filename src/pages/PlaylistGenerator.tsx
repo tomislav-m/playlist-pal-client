@@ -5,32 +5,31 @@ import { Track } from "../types/Track";
 
 const PlaylistGenerator: FC = () => {
   const [isCreating, setIsCreating] = useState(false);
-  const [playlistName, setPlaylistName] = useState("");
   const [playlistSize, setPlaylistSize] = useState(20);
+  const [isValid, setIsValid] = useState(false);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("Success");
   const [snackbarColor, setSnackbarColor] = useState<AlertColor>("success");
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPlaylistName(event.target.value);
-  };
-
   const handleSizeChange = (event: ChangeEvent<HTMLInputElement>) => {
     const val = parseInt(event.target.value);
-    if (isNaN(val)) {
+    if (isNaN(val) || val < 1) {
       return;
     }
     setPlaylistSize(val);
   };
 
-  const get = () => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+
     setIsCreating(true);
 
     request<Track>("playlist", HttpMethod.POST, {
-      playlistName,
+      ...Object.fromEntries(data),
       filter: {},
-      size: playlistSize,
     })
       .then(() => {
         setSnackbarColor("success");
@@ -51,15 +50,21 @@ const PlaylistGenerator: FC = () => {
   };
 
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <TextField
         placeholder="Playlist title"
         disabled={isCreating}
-        value={playlistName}
-        onChange={handleChange}
         required={true}
         variant="standard"
         size="small"
+        name="playlistName"
+        onChange={(e) => {
+          if (e.currentTarget.value.length && !isValid) {
+            setIsValid(true);
+          } else if (!e.currentTarget.value.length && isValid) {
+            setIsValid(false);
+          }
+        }}
       />
       <TextField
         placeholder="Size"
@@ -69,12 +74,13 @@ const PlaylistGenerator: FC = () => {
         size="small"
         type="number"
         variant="standard"
-        style={{ width: "100px" }}
+        sx={{ width: "100px" }}
+        name="size"
       />
       <Button
-        onClick={get}
+        type="submit"
         variant="contained"
-        disabled={isCreating || playlistName.length === 0}
+        disabled={isCreating || !isValid}
         size="small"
       >
         {" "}
@@ -94,7 +100,7 @@ const PlaylistGenerator: FC = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
-    </>
+    </form>
   );
 };
 
