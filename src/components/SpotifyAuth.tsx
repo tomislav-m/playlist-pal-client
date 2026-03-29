@@ -16,7 +16,7 @@ export const SpotifyAuth = () => {
       window.history.replaceState(
         null,
         "",
-        window.location.href.split("#access_token")[0]
+        window.location.href.split("#access_token")[0],
       );
     }
   }, [setAccessToken]);
@@ -36,7 +36,7 @@ export const SpotifyAuth = () => {
   };
 
   const getRedirectUrl = () =>
-    "https://accounts.spotify.com/authorize?response_type=token" +
+    "https://accounts.spotify.com/authorize?response_type=code" +
     `&client_id=${import.meta.env.VITE_REACT_APP_SPOTIFY_CLIENT_ID}` +
     `&scope=user-top-read%20playlist-modify-private%20playlist-modify-public` +
     `&redirect_uri=${import.meta.env.VITE_REACT_APP_SPOTIFY_REDIRECT_URI}` +
