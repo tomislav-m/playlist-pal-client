@@ -1,5 +1,3 @@
-import Cookies from "js-cookie";
-
 const urlBase = import.meta.env.VITE_REACT_APP_API_URL;
 
 export enum HttpMethod {
@@ -12,11 +10,12 @@ export enum HttpMethod {
 const request = async <TResponse>(
   url: string,
   method: HttpMethod,
+  accessToken: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: any
+  data?: any,
 ): Promise<TResponse> => {
   const headers = new Headers({ "Content-Type": "application/json" });
-  headers.append("spotify-token", Cookies.get("spotifyAuthToken") || "");
+  headers.append("spotify-token", accessToken);
 
   const response = await fetch(urlBase + url, {
     method,

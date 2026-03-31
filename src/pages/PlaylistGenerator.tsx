@@ -10,6 +10,7 @@ import {
 import request, { HttpMethod } from "../api/requests";
 import { PlaylistDto } from "../types/Track";
 import { Playlist } from "../components/Playlist";
+import { useSpotifyAuth } from "../auth/useSpotifyAuth";
 
 const PlaylistGenerator: FC = () => {
   const [isCreating, setIsCreating] = useState(false);
@@ -21,6 +22,8 @@ const PlaylistGenerator: FC = () => {
   const [snackbarColor, setSnackbarColor] = useState<AlertColor>("success");
 
   const [playlist, setPlaylist] = useState<PlaylistDto>();
+
+  const { accessToken } = useSpotifyAuth();
 
   const handleSizeChange = (event: ChangeEvent<HTMLInputElement>) => {
     const val = parseInt(event.target.value);
@@ -39,7 +42,7 @@ const PlaylistGenerator: FC = () => {
 
     setIsCreating(true);
 
-    request<PlaylistDto>("playlist", HttpMethod.POST, {
+    request<PlaylistDto>("playlist", HttpMethod.POST, accessToken, {
       ...Object.fromEntries(data),
       filter: {},
     })
