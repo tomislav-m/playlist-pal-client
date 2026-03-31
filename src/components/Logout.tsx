@@ -1,18 +1,11 @@
 import { Button } from "@mui/material";
-import Cookies from "js-cookie";
-import { useContext } from "react";
-import { SpotifyContext } from "../context/SpotifyContext";
+import { useSpotifyAuth } from "../auth/useSpotifyAuth";
 
 export const Logout = () => {
-  const token = useContext(SpotifyContext);
-
-  const logout = () => {
-    Cookies.remove("spotifyAuthToken");
-    window.location.reload();
-  };
+  const { isLoggedIn, logout } = useSpotifyAuth();
 
   return (
-    token && (
+    isLoggedIn && (
       <Button color="inherit" onClick={logout}>
         Logout
       </Button>

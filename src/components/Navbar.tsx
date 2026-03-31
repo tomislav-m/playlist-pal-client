@@ -9,11 +9,10 @@ import {
   Typography,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import { SpotifyContext } from "../context/SpotifyContext";
-import { useContext } from "react";
+import { useSpotifyAuth } from "../auth/useSpotifyAuth";
 
 const Navbar = () => {
-  const accessToken = useContext(SpotifyContext);
+  const { isLoggedIn } = useSpotifyAuth();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -40,7 +39,7 @@ const Navbar = () => {
             >
               <Typography variant="h6">Playlist generator</Typography>
             </Link>
-            {accessToken && (
+            {isLoggedIn && (
               <Link
                 to="/top-artists"
                 color="inherit"

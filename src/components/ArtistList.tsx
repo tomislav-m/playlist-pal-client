@@ -8,6 +8,7 @@ import {
   Grid2,
   Typography,
 } from "@mui/material";
+import { useSpotifyAuth } from "../auth/useSpotifyAuth";
 
 type ArtistListProps = {
   timeRange: string;
@@ -18,12 +19,15 @@ export const ArtistList = ({ timeRange, isVisible }: ArtistListProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [artists, setArtists] = useState<ArtistSimple[]>([]);
 
+  const { accessToken } = useSpotifyAuth();
+
   useEffect(() => {
     setIsLoading(true);
 
     request<ArtistSimple[]>(
       "artist/user-top?timeRange=" + timeRange,
-      HttpMethod.GET
+      HttpMethod.GET,
+      accessToken,
     )
       .then((artists) => {
         setArtists(artists);
